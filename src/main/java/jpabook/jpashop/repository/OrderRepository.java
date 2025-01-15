@@ -30,32 +30,33 @@ public class OrderRepository {
     public Order findOne(Long id) {
         return em.find(Order.class, id);
     }
-//    public List<Order> findAll(OrderSearch orderSearch) {
-//
-//        QOrder order = QOrder.order;
-//        QMember member = QMember.member;
-//
-//        return queryFactory
-//                .select(order)
-//                .from(order)
-//                .join(order.member, member) // order와 member를 조인
-//                .where(
-//                        statusEq(orderSearch.getOrderStatus()), // 주문 상태 조건
-//                        nameLike(orderSearch.getMemberName()) // 회원 이름 조건
-//                )
-//                .limit(100)
-//                .fetch(); // 결과 리스트 반환
-//    }
-//    private BooleanExpression statusEq(OrderStatus statusCond) {
-//        if (statusCond == null) {
-//            return null;
-//        }
-//        return order.status.eq;
-//    }
-//    private BooleanExpression nameLike(String nameCond) {
-//        if (!StringUtils.hasText(nameCond)){
-//            return null;
-//        }
-//        return member.name.like(nameCond);
-//    }
+
+    public List<Order> findAll(OrderSearch orderSearch) {
+
+        QOrder order = QOrder.order;
+        QMember member = QMember.member;
+
+        return queryFactory
+                .select(order)
+                .from(order)
+                .join(order.member, member) // order와 member를 조인
+                .where(
+                        statusEq(orderSearch.getOrderStatus()), // 주문 상태 조건
+                        nameLike(orderSearch.getMemberName()) // 회원 이름 조건
+                )
+                .limit(100)
+                .fetch(); // 결과 리스트 반환
+    }
+    private BooleanExpression statusEq(OrderStatus statusCond) {
+        if (statusCond == null) {
+            return null;
+        }
+        return order.status.eq(statusCond);
+    }
+    private BooleanExpression nameLike(String nameCond) {
+        if (!StringUtils.hasText(nameCond)){
+            return null;
+        }
+        return member.name.like(nameCond);
+    }
 }
